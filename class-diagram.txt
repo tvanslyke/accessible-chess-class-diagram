@@ -7,10 +7,10 @@ class VoiceAssistant {
 
 class ChessEngine {
 	ponder(Board, Color)
-	ponderPosition(Board, Color, BoardPosition)
+	ponderPosition(Board, Color, int, int)
 }
 
-ChessEngine <|-- UCIChessEngine
+ChessEngine <|.. UCIChessEngine
 
 class Color <<enumeration>> {
 	White
@@ -27,22 +27,20 @@ class ChessPieceKind <<enumeration>> {
 }
 
 class ChessPiece {
-	color: Color
-	kind:  ChessPieceKind
+
 }
+
+ChessPiece *-- "1" Color
+ChessPiece *-- "1" ChessPieceKind
+
 
 Board *-- "2..*" ChessPiece
-Serializable <|-- Board
-
-class BoardPosition {
-	row:    unsigned int
-	column: unsigned int
-}
+Serializable <|.. Board
 
 class Board {
-	movePiece(BoardPosition, BoardPosition)
+	movePiece(int, int, int, int)
 	clearPieces()
-	getPiece(BoardPosition)
+	getPiece(int, int)
 }
 
 class Game {
@@ -51,14 +49,14 @@ class Game {
 
 	duration()
 	save()
-	queryAttackers(BoardPosition)
-	queryPiece(BoardPosition)
+	queryAttackers(int, int)
+	queryPiece(int, int)
 	queryMaterial()
 	forfeit(Color)
 	undoMove()
 }
 
-Serializable <|-- Game
+Serializable <|.. Game
 
 class GameSnapshot {
 	save()
@@ -67,7 +65,7 @@ class GameSnapshot {
 	getHalfTurn()
 }
 
-Serializable <|-- GameSnapshot
+Serializable <|.. GameSnapshot
 
 class GameHistory {
 	save()
@@ -75,7 +73,7 @@ class GameHistory {
 	snapshotCount()
 	getSnapshot(int)
 }
-Serializable <|-- GameHistory
+Serializable <|.. GameHistory
 
 Game *-- "1" GameHistory
 GameHistory *-- "*" GameSnapshot
@@ -92,15 +90,10 @@ Session *-- "0..1" Game
 Session *-- "1" VoiceAssistant
 Session *-- "1" ChessEngine
 
-class GameOptions {
-	allottedTime: unsigned int?
-	initialBoard: Board
-}
-
 class Session {
 	receiveCommand()
 	receiveVocalCommand()
-	createNewGame(GameOptions)
+	createNewGame()
 	forfeitGame(Color)
 	closeActiveGame()
 }
