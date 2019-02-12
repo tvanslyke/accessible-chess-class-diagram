@@ -4,11 +4,13 @@ class VoiceAssistant {
 	listen()
 }
 
-UCIChessEngine -> ChessEngine
 
-class UCIChessEngine {
+class ChessEngine {
 	ponder(Board, Color)
+	ponderPosition(Board, Color, BoardPosition)
 }
+
+UCIChessEngine -> ChessEngine
 
 class Color <<enumeration>> {
 	White
@@ -30,6 +32,7 @@ class ChessPiece {
 }
 
 Board *-- "2..*" ChessPiece
+Board -> Serializable
 
 class BoardPosition {
 	row:    unsigned int
@@ -39,6 +42,7 @@ class BoardPosition {
 class Board {
 	movePiece(BoardPosition, BoardPosition)
 	clearPieces()
+	getPiece(BoardPosition)
 }
 
 class Game {
@@ -54,14 +58,24 @@ class Game {
 	undoMove()
 }
 
+Game -> Serializable
+
 class GameSnapshot {
 	save()
+	getBoard()
+	getTime()
+	getHalfTurn()
 }
+
+GameSnapshot -> Serializable
 
 class GameHistory {
 	save()
 	load()
+	snapshotCount()
+	getSnapshot(int)
 }
+GameHistory -> Serializable
 
 Game *-- "1" GameHistory
 GameHistory *-- "*" GameSnapshot
@@ -99,5 +113,19 @@ class EnginePlayer -> Player
 class HumanPlayer -> Player
 
 Game *-- "2" Player
+
+class Serializable {
+	serialize()
+}
+
+class MaterialCounter {
+	countInstances(ChessPiece)
+}
+
+Game *-- "2" MaterialCounter
+
+MaterialCounter *-- "*" ChessPiece
+
+
 
 @enduml
