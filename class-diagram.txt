@@ -1,6 +1,5 @@
 @startuml
 
-
 class VoiceAssistant {
 	listen()
 }
@@ -8,7 +7,7 @@ class VoiceAssistant {
 UCIChessEngine -> ChessEngine
 
 class UCIChessEngine {
-	ponder()
+	ponder(Board, Color)
 }
 
 class Color <<enumeration>> {
@@ -16,19 +15,22 @@ class Color <<enumeration>> {
 	Black
 }
 
-class ChessPiece {
-	color: Color
+
+class ChessPieceKind <<enumeration>> {
+	Pawn
+	King
+	Queen
+	Bishop
+	Knight
+	Rook
 }
 
-Pawn   -> ChessPiece
-King   -> ChessPiece
-Queen  -> ChessPiece
-Bishop -> ChessPiece
-Knight -> ChessPiece
-Rook   -> ChessPiece
+class ChessPiece {
+	color: Color
+	kind:  ChessPieceKind
+}
 
-Board *-- "*" ChessPiece
-Board *-- "2" King
+Board *-- "2..*" ChessPiece
 
 class BoardPosition {
 	row:    unsigned int
@@ -36,12 +38,33 @@ class BoardPosition {
 }
 
 class Board {
-	movePiece()
+	movePiece(BoardPosition, BoardPosition)
+	clearPieces()
 }
 
 class Game {
+	halfTurn: Color
+	turnNumber: unsigned int
+
 	duration()
+	save()
+	queryAttackers(BoardPosition)
+	queryPiece(BoardPosition)
+	queryMaterial()
+	forfeit(Color)
 }
+
+class GameSnapshot {
+	save()
+}
+
+class GameHistory {
+	save()
+	load()
+}
+
+Game *-- "1" GameHistory
+GameHistory *-- "*" GameSnapshot
 
 Game *-- "1" Board
 
@@ -50,11 +73,22 @@ CustomGame   -> Game
 StandardGame -> TimedGame
 BlitzGame    -> TimedGame
 
-
-
-
 Session *-- "0..1" Game
 
+Session *-- "1" VoiceAssistant
+Session *-- "1" ChessEngine
+
+class GameOptions {
+	allottedTime: unsigned int?
+	initialBoard: Board
+}
+
+class Session {
+	receiveCommand()
+	receiveVocalCommand()
+	createNewGame(GameOptions)
+	forfeitGame(Color)
+}
 
 
 
