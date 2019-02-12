@@ -3,7 +3,6 @@
 
 class VoiceAssistant {
 	listen()
-	
 }
 
 UCIChessEngine -> ChessEngine
@@ -12,20 +11,49 @@ class UCIChessEngine {
 	ponder()
 }
 
-class Game {
-
+class Color <<enumeration>> {
+	White
+	Black
 }
 
-TimedGame -> Game
+class ChessPiece {
+	color: Color
+}
+
+Pawn   -> ChessPiece
+King   -> ChessPiece
+Queen  -> ChessPiece
+Bishop -> ChessPiece
+Knight -> ChessPiece
+Rook   -> ChessPiece
+
+Board *-- "*" ChessPiece
+Board *-- "2" King
+
+class BoardPosition {
+	row:    unsigned int
+	column: unsigned int
+}
+
+class Board {
+	movePiece()
+}
+
+class Game {
+	duration()
+}
+
+Game *-- "1" Board
+
+TimedGame    -> Game
+CustomGame   -> Game
 StandardGame -> TimedGame
-BlitzGame -> TimedGame
-CustomGame -> Game
+BlitzGame    -> TimedGame
 
 
 
 
-
-
+Session *-- "0..1" Game
 
 
 
