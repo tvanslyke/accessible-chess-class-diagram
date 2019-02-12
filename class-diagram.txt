@@ -1,0 +1,33 @@
+@startuml
+
+
+class VoiceAssistant {
+	listen()
+	
+}
+
+UCIChessEngine -> ChessEngine
+
+class UCIChessEngine {
+	ponder()
+}
+
+class Game {
+
+}
+
+TimedGame -> Game
+StandardGame -> TimedGame
+BlitzGame -> TimedGame
+CustomGame -> Game
+
+
+
+
+
+
+
+
+
+
+@enduml
