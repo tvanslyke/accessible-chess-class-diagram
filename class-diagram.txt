@@ -114,7 +114,7 @@ class Player <|-- HumanPlayer
 
 Game *-- "2" Player
 
-class Serializable {
+class Serializable <<interface>> {
 	serialize()
 }
 
