@@ -15,7 +15,6 @@ class Color <<enumeration>> {
 	Black
 }
 
-
 class ChessPieceKind <<enumeration>> {
 	Pawn
 	King
@@ -52,6 +51,7 @@ class Game {
 	queryPiece(BoardPosition)
 	queryMaterial()
 	forfeit(Color)
+	undoMove()
 }
 
 class GameSnapshot {
@@ -88,8 +88,16 @@ class Session {
 	receiveVocalCommand()
 	createNewGame(GameOptions)
 	forfeitGame(Color)
+	closeActiveGame()
 }
 
+class Player {
 
+}
+
+class EnginePlayer -> Player
+class HumanPlayer -> Player
+
+Game *-- "2" Player
 
 @enduml
