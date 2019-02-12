@@ -10,7 +10,7 @@ class ChessEngine {
 	ponderPosition(Board, Color, BoardPosition)
 }
 
-UCIChessEngine -> ChessEngine
+ChessEngine <|-- UCIChessEngine
 
 class Color <<enumeration>> {
 	White
@@ -32,7 +32,7 @@ class ChessPiece {
 }
 
 Board *-- "2..*" ChessPiece
-Board -> Serializable
+Serializable <|-- Board
 
 class BoardPosition {
 	row:    unsigned int
@@ -58,7 +58,7 @@ class Game {
 	undoMove()
 }
 
-Game -> Serializable
+Serializable <|-- Game
 
 class GameSnapshot {
 	save()
@@ -67,7 +67,7 @@ class GameSnapshot {
 	getHalfTurn()
 }
 
-GameSnapshot -> Serializable
+Serializable <|-- GameSnapshot
 
 class GameHistory {
 	save()
@@ -75,17 +75,17 @@ class GameHistory {
 	snapshotCount()
 	getSnapshot(int)
 }
-GameHistory -> Serializable
+Serializable <|-- GameHistory
 
 Game *-- "1" GameHistory
 GameHistory *-- "*" GameSnapshot
 
 Game *-- "1" Board
 
-TimedGame    -> Game
-CustomGame   -> Game
-StandardGame -> TimedGame
-BlitzGame    -> TimedGame
+Game <|-- TimedGame
+Game <|-- CustomGame
+TimedGame <|-- StandardGame
+TimedGame <|-- BlitzGame
 
 Session *-- "0..1" Game
 
@@ -109,8 +109,8 @@ class Player {
 
 }
 
-class EnginePlayer -> Player
-class HumanPlayer -> Player
+class Player <|-- EnginePlayer
+class Player <|-- HumanPlayer
 
 Game *-- "2" Player
 
