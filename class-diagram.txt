@@ -4,13 +4,37 @@ class VoiceAssistant {
 	listen()
 }
 
-
-class ChessEngine {
-	ponder(Board, Color)
-	ponderPosition(Board, Color, int, int)
+class BoardPosition {
+	+row: const int
+	+file: const int
 }
 
-ChessEngine <|.. UCIChessEngine
+Move "1" *-- "2" BoardPosition
+Move "1" *-- "1" ChessPiece
+
+class Move {
+	+BoardPosition startPosition()
+	+BoardPosition endPosition()
+	+ChessPiece piece()
+}
+
+
+class ChessEngine {
+	+void open()
+	+int getEngineProccessID()
+	+void close()
+	+void setCheckOption(string, bool)
+	+void setSpinOption(string, int)
+	+void setComboOption(string, string)
+	+void setButtonOption(string)
+	+void setStringOption(string, string)
+	+List<string> options()
+	+string rawUCICommand(string)
+	+void setPosition(Board, List<Move>)
+	+void startPondering(List<Move>)
+	+void ponderHit()
+	+Move stopPondering()
+}
 
 class Color <<enumeration>> {
 	White
@@ -27,7 +51,8 @@ class ChessPieceKind <<enumeration>> {
 }
 
 class ChessPiece {
-
+	Color color()
+	ChessPieceKind kind()
 }
 
 ChessPiece *-- "1" Color
@@ -38,41 +63,57 @@ Board *-- "2..*" ChessPiece
 Serializable <|.. Board
 
 class Board {
-	movePiece(int, int, int, int)
-	clearPieces()
-	getPiece(int, int)
+	+void movePiece(int, int, int, int)
+	+void clearPieces()
+	+ChessPiece? getPiece(int, int)
 }
 
 class Game {
-	halfTurn: Color
-	turnNumber: unsigned int
+	-halfTurn: Color
+	-turnNumber: unsigned int
 
-	duration()
-	save()
-	queryAttackers(int, int)
-	queryPiece(int, int)
-	queryMaterial()
-	forfeit(Color)
-	undoMove()
+	+int duration()
+	+void save()
+	+void queryAttackers(int, int)
+	+void queryPiece(int, int)
+	+void queryMaterial()
+	+void forfeit(Color)
+	+void undoMove()
+	+Player whitePlayer()
+	+Player blackPlayer()
+	+Board getBoard()
+	+int getTime()
+	+Color getHalfTurn()
+	+int getTurnNumber()
 }
+
+ChessEngine "1" --> "1..*" Move : ponders
 
 Serializable <|.. Game
 
 class GameSnapshot {
-	save()
-	getBoard()
-	getTime()
-	getHalfTurn()
+	void save()
+	Board getBoard()
+	int getTime()
+	Color getHalfTurn()
 }
 
 Serializable <|.. GameSnapshot
 
 class GameHistory {
-	save()
-	load()
-	snapshotCount()
-	getSnapshot(int)
+	void save()
+	Game load()
+	int snapshotCount()
+	GameSnapshot getSnapshot(int)
 }
+
+class TimedGame {
+	int initialSecondsBlack()
+	int initialSecondsWhite()
+	int incrementSecondsBlack()
+	int incrementSecondsWhite()
+}
+
 Serializable <|.. GameHistory
 
 Game *-- "1" GameHistory
@@ -91,28 +132,22 @@ Session *-- "1" VoiceAssistant
 Session *-- "1" ChessEngine
 
 class Session {
-	receiveCommand()
-	receiveVocalCommand()
-	createNewGame()
-	forfeitGame(Color)
-	closeActiveGame()
+	+void receiveCommand()
+	+void receiveVocalCommand()
+	+void createNewGame()
+	+void forfeitGame(Color)
+	+void closeActiveGame()
+	+bool hasActiveGame()
 }
-
-class Player {
-
-}
-
-class Player <|-- EnginePlayer
-class Player <|-- HumanPlayer
-
-Game *-- "2" Player
 
 class Serializable <<interface>> {
 	serialize()
 }
 
 class MaterialCounter {
-	countInstances(ChessPiece)
+	int countInstances(ChessPiece)
+	int blackPoints()
+	int whitePoints()
 }
 
 Game *-- "2" MaterialCounter
