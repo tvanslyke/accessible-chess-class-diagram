@@ -8,17 +8,18 @@ class VoiceAssistant {
 }
 
 class BoardPosition {
-	+row: const int
-	+file: const int
+	-row: const int
+	-file: const int
+
+	int getRow()
+	int getFile()
 }
 
 Move "1" *-- "2" BoardPosition
-Move "1" *-- "1" ChessPiece
 
 class Move {
 	+BoardPosition startPosition()
 	+BoardPosition endPosition()
-	+ChessPiece piece()
 }
 
 class ChessEngine {
@@ -66,6 +67,7 @@ Serializable <|.. Board
 class Board {
 	+void movePiece(int, int, int, int)
 	+void clearPieces()
+	+void applyMove(Move)
 	+ChessPiece? getPiece(int, int)
 }
 
@@ -84,6 +86,7 @@ class Game {
 	+int getTime()
 	+Color getHalfTurn()
 	+int getTurnNumber()
+	+Move lastMove()
 }
 
 ChessEngine "1" --> "1..*" Move : ponders
@@ -91,17 +94,23 @@ ChessEngine "1" --> "1..*" Move : ponders
 Serializable <|.. Game
 
 class GameSnapshot {
-	+void save()
+	-halfTurn: Color
+	-turnNumber: unsigned int
+
+	+Game load()
+	+void save(string)
 	+Board getBoard()
 	+int getTime()
 	+Color getHalfTurn()
+	+unsigned ing getTurnNumber()
 }
+
+GameSnapshot "1" *-- "1" Board
 
 Serializable <|.. GameSnapshot
 
 class GameHistory {
-	+void save()
-	+Game load()
+	+void save(string)
 	+int snapshotCount()
 	+GameSnapshot getSnapshot(int)
 }
