@@ -1,7 +1,10 @@
 @startuml
 
 class VoiceAssistant {
-	listen()
+	+bool enabled()
+	+bool isBusy()
+	+void say(string)
+	+List<string> getLastCommand()
 }
 
 class BoardPosition {
@@ -17,7 +20,6 @@ class Move {
 	+BoardPosition endPosition()
 	+ChessPiece piece()
 }
-
 
 class ChessEngine {
 	+void open()
@@ -51,15 +53,14 @@ class ChessPieceKind <<enumeration>> {
 }
 
 class ChessPiece {
-	Color color()
-	ChessPieceKind kind()
+	+Color color()
+	+ChessPieceKind kind()
 }
 
-ChessPiece *-- "1" Color
-ChessPiece *-- "1" ChessPieceKind
+ChessPiece "1" *-- "1" Color
+ChessPiece "1" *-- "1" ChessPieceKind
 
-
-Board *-- "2..*" ChessPiece
+Board "1" *-- "2..*" ChessPiece
 Serializable <|.. Board
 
 class Board {
@@ -79,8 +80,6 @@ class Game {
 	+void queryMaterial()
 	+void forfeit(Color)
 	+void undoMove()
-	+Player whitePlayer()
-	+Player blackPlayer()
 	+Board getBoard()
 	+int getTime()
 	+Color getHalfTurn()
@@ -92,44 +91,41 @@ ChessEngine "1" --> "1..*" Move : ponders
 Serializable <|.. Game
 
 class GameSnapshot {
-	void save()
-	Board getBoard()
-	int getTime()
-	Color getHalfTurn()
+	+void save()
+	+Board getBoard()
+	+int getTime()
+	+Color getHalfTurn()
 }
 
 Serializable <|.. GameSnapshot
 
 class GameHistory {
-	void save()
-	Game load()
-	int snapshotCount()
-	GameSnapshot getSnapshot(int)
+	+void save()
+	+Game load()
+	+int snapshotCount()
+	+GameSnapshot getSnapshot(int)
 }
 
 class TimedGame {
-	int initialSecondsBlack()
-	int initialSecondsWhite()
-	int incrementSecondsBlack()
-	int incrementSecondsWhite()
+	+int initialSecondsBlack()
+	+int initialSecondsWhite()
+	+int incrementSecondsBlack()
+	+int incrementSecondsWhite()
 }
 
 Serializable <|.. GameHistory
 
-Game *-- "1" GameHistory
-GameHistory *-- "*" GameSnapshot
+Game "1" *-- "1" GameHistory
+GameHistory "1" *-- "*" GameSnapshot
 
-Game *-- "1" Board
+Game "1" *-- "1" Board
 
 Game <|-- TimedGame
-Game <|-- CustomGame
-TimedGame <|-- StandardGame
-TimedGame <|-- BlitzGame
 
-Session *-- "0..1" Game
+Session "1" *-- "0..1" Game
 
-Session *-- "1" VoiceAssistant
-Session *-- "1" ChessEngine
+Session "1" *-- "1" VoiceAssistant
+Session "1" *-- "1" ChessEngine
 
 class Session {
 	+void receiveCommand()
@@ -138,22 +134,22 @@ class Session {
 	+void forfeitGame(Color)
 	+void closeActiveGame()
 	+bool hasActiveGame()
+	+VoiceAssistant voiceAssistant()
+	+void parseCommand()
 }
 
 class Serializable <<interface>> {
-	serialize()
+	+string serialize()
 }
 
 class MaterialCounter {
-	int countInstances(ChessPiece)
-	int blackPoints()
-	int whitePoints()
+	+int countInstances(ChessPiece)
+	+int blackPoints()
+	+int whitePoints()
 }
 
-Game *-- "2" MaterialCounter
+Game "1" *-- "1" MaterialCounter
 
-MaterialCounter *-- "*" ChessPiece
-
-
+MaterialCounter "1" *-- "*" ChessPiece
 
 @enduml
