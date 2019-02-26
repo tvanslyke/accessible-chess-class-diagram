@@ -5,6 +5,8 @@ class VoiceAssistant {
 	+bool isBusy()
 	+void say(string)
 	+List<string> getLastCommand()
+	+bool promptSaveActiveGame()
+	+void notifyGameLoaded()
 }
 
 class BoardPosition {
@@ -77,6 +79,8 @@ class Game {
 
 	+int duration()
 	+void save()
+	+Game createNewGame()
+	+void setPlayerSide()
 	+void queryAttackers(int, int)
 	+void queryPiece(int, int)
 	+void queryMaterial()
@@ -87,6 +91,13 @@ class Game {
 	+Color getHalfTurn()
 	+int getTurnNumber()
 	+Move lastMove()
+	+void movePiece(Move)
+	+void updateBoard()
+	+void pause()
+	+bool isPaused()
+	+bool hasUnsavedChanges()
+	+void saveAndClose()
+	+void loadSavedGame()
 }
 
 ChessEngine "1" --> "1..*" Move : ponders
@@ -145,6 +156,10 @@ class Session {
 	+bool hasActiveGame()
 	+VoiceAssistant voiceAssistant()
 	+void parseCommand()
+	+void parseSide()
+	+void pauseActiveGame()
+	+Game loadGame()
+	+List<Game> getSavedGames()
 }
 
 class Serializable <<interface>> {

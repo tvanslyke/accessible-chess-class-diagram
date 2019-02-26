@@ -4,13 +4,13 @@ skinparam monochrome true
 
 [*] --> MainMenu: Start
 
-InGame --> CloseActiveGame: "Close Game" Command
+InGame --> CloseActiveGame: Close Game Command
 
-InGame --> CreateNewGame: "Create New Game" Command
+InGame --> CreateNewGame: Create New Game Command
 
-MainMenu--> CreateNewGame: "Create New Game" Command
+MainMenu--> CreateNewGame: Create New Game Command
 
-InGame --> InGame: "Save Game" Command
+InGame --> InGame: Save Game Command
 
 CloseActiveGame --> PromptSaveActiveGame: Close Unsaved Game
 
@@ -46,20 +46,20 @@ CloseActiveGame --> PromptChooseSavedGame: Game Closed
 
 MainMenu --> PromptChooseSavedGame: Load Saved Game
 
-MainMenu: No active games
-MainMenu: Awaiting commands
+MainMenu: do/ No active games
+MainMenu: do/ Awaiting commands
 
-InGame: Active game in progress
+InGame: do/ Active game in progress
 
-CreateNewGame: Game creation & loading
+CreateNewGame: do/ Game creation & loading
 
-PromptGameSettings: New game creation
-PromptGameSettings: User choosing settings
+PromptGameSettings: do/ New game creation
+PromptGameSettings: do/ User choosing settings
 
-CloseActiveGame: Closing active game
+CloseActiveGame: do/ Closing active game
 
-PromptSaveActiveGame: User saving or discarding game changes
+PromptSaveActiveGame: do/ User saving or discarding game changes
 
-PromptChooseSavedGame: User choosing game to load
+PromptChooseSavedGame: do/ User choosing game to load
 
 @enduml

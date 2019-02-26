@@ -16,11 +16,11 @@ PerformAction --> Idle: Action Completed/Cancelled
 
 PerformAction --> [*]: Exit Session
 
-Idle: Listening/waiting for commands
+Idle: do/ Listening/waiting for commands
 
-PerformAction: Inspecting/Mutating game state
-PerformAction: Creating/saving/loading/closing game
+PerformAction: do/ Inspecting/Mutating game state
+PerformAction: do/ Creating/saving/loading/closing game
 
-ReceiveCommand: Parsing/validating command
+ReceiveCommand: do/ Parsing/validating command
 
 @enduml
