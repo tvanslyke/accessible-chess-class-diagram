@@ -1,0 +1,65 @@
+@startuml
+
+skinparam monochrome true
+
+[*] --> MainMenu: Start
+
+InGame --> CloseActiveGame: "Close Game" Command
+
+InGame --> CreateNewGame: "Create New Game" Command
+
+MainMenu--> CreateNewGame: "Create New Game" Command
+
+InGame --> InGame: "Save Game" Command
+
+CloseActiveGame --> PromptSaveActiveGame: Close Unsaved Game
+
+PromptSaveActiveGame --> CloseActiveGame: Finished Saving/Don't Save
+
+' PromptSaveActiveGame --> InGame: Action Cancelled
+
+CloseActiveGame --> MainMenu: Game Closed (no game loaded)
+
+' CloseActiveGame --> InGame: Action Cancelled
+
+CreateNewGame --> PromptGameSettings: Create New Game
+
+PromptGameSettings --> InGame: Game Created & Loaded (no unsaved changes)
+
+PromptGameSettings --> CloseActiveGame: Game Created (unsaved changes)
+
+' CloseActiveGame --> PromptGameSettings: Action Cancelled
+
+' PromptGameSettings --> CreateNewGame: Action Cancelled
+
+' CreateNewGame --> MainMenu: Action Cancelled
+
+' CreateNewGame --> InGame: Action Cancelled
+
+PromptChooseSavedGame --> CloseActiveGame: Loading Game (unsaved changes)
+
+PromptChooseSavedGame --> InGame: Game Loaded
+
+InGame --> PromptChooseSavedGame: Load Saved Game
+
+CloseActiveGame --> PromptChooseSavedGame: Game Closed
+
+MainMenu --> PromptChooseSavedGame: Load Saved Game
+
+MainMenu: No active games
+MainMenu: Awaiting commands
+
+InGame: Active game in progress
+
+CreateNewGame: Game creation & loading
+
+PromptGameSettings: New game creation
+PromptGameSettings: User choosing settings
+
+CloseActiveGame: Closing active game
+
+PromptSaveActiveGame: User saving or discarding game changes
+
+PromptChooseSavedGame: User choosing game to load
+
+@enduml

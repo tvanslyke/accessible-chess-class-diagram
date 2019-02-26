@@ -1,0 +1,26 @@
+@startuml
+
+skinparam monochrome true
+
+[*] --> Idle: Start
+
+Idle --> ReceiveCommand: Receive Vocal Command
+
+ReceiveCommand --> Idle: Bad Command Received
+
+' Error --> Idle: Notify User
+
+ReceiveCommand --> PerformAction: Command
+
+PerformAction --> Idle: Action Completed/Cancelled
+
+PerformAction --> [*]: Exit Session
+
+Idle: Listening/waiting for commands
+
+PerformAction: Inspecting/Mutating game state
+PerformAction: Creating/saving/loading/closing game
+
+ReceiveCommand: Parsing/validating command
+
+@enduml

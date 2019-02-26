@@ -1,0 +1,99 @@
+@startuml
+
+skinparam monochrome true
+
+actor User 
+participant VoiceAssistant
+participant Session
+participant Game
+
+activate User
+
+	User -> VoiceAssistant: "Load Game" Vocal Command
+
+activate VoiceAssistant 
+
+	VoiceAssistant --> Session: pauseActiveGame()
+
+activate Session
+
+	Session -> Game: pause()
+
+activate Game
+
+	Game --> Session: return
+
+deactivate Game
+
+	Session --> VoiceAssistant: return
+
+deactivate Session
+
+	VoiceAssistant -> Session: getSavedGames()
+
+activate Session
+
+	Session --> VoiceAssistant: return
+
+deactivate Session
+
+	VoiceAssistant --> User: Prompt: Choose Saved Game
+
+	User -> VoiceAssistant: Select Game
+
+	VoiceAssistant -> Session: loadGame()
+
+activate Session
+deactivate VoiceAssistant
+
+	Session -> Game: hasUnsavedChanges()
+
+activate Game
+
+	Game --> Session: return
+
+deactivate Game
+
+	Session -> VoiceAssistant: promptSaveActiveGame()
+
+activate VoiceAssistant
+
+	VoiceAssistant --> User: Prompt: Save Active Game?
+
+	User -> VoiceAssistant: Yes/No
+
+	VoiceAssistant --> Session: return 
+
+deactivate VoiceAssistant
+
+	Session -> Game: saveAndClose()
+
+activate Game
+
+	Game --> Session: return
+
+deactivate Game
+
+	Session -> Game: loadSavedGame()
+
+activate Game
+
+	Game --> Session: return
+
+deactivate Game
+
+
+	Session -> VoiceAssistant: notifyGameLoaded()
+
+deactivate Session
+
+activate VoiceAssistant
+
+	VoiceAssistant --> User: Successfully Loaded Game
+
+deactivate VoiceAssistant
+deactivate User
+
+
+
+@enduml
