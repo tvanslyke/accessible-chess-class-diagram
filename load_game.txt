@@ -13,7 +13,7 @@ activate User
 
 activate VoiceAssistant 
 
-	VoiceAssistant --> Session: pauseActiveGame()
+	VoiceAssistant -> Session: pauseActiveGame()
 
 activate Session
 
@@ -41,6 +41,8 @@ deactivate Session
 
 	User -> VoiceAssistant: Select Game
 
+	VoiceAssistant --> User: Action Cancelled
+
 	VoiceAssistant -> Session: loadGame()
 
 activate Session
@@ -62,9 +64,8 @@ activate VoiceAssistant
 
 	User -> VoiceAssistant: Yes/No
 
-	VoiceAssistant --> Session: return 
+	VoiceAssistant --> Session: Yes
 
-deactivate VoiceAssistant
 
 	Session -> Game: saveAndClose()
 
@@ -73,6 +74,10 @@ activate Game
 	Game --> Session: return
 
 deactivate Game
+
+	VoiceAssistant --> Session: No
+
+deactivate VoiceAssistant
 
 	Session -> Game: loadSavedGame()
 
